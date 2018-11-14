@@ -2,7 +2,7 @@
 # Base image
 ################################################################################
 
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 MAINTAINER  Oscar Gallardo "oscar.gallardo@outlook.com"
 
 ################################################################################
@@ -12,9 +12,11 @@ MAINTAINER  Oscar Gallardo "oscar.gallardo@outlook.com"
 # Remove default nginx configs.
 RUN rm -f /etc/nginx/conf.d/*
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install packages
 RUN apt-get update && apt-get install -my software-properties-common && add-apt-repository ppa:ondrej/php
-RUN apt-get update && apt-get install -my --force-yes \
+RUN apt-get update && apt-get install -my --yes \
   supervisor \
   openssh-server \
   nginx \
@@ -25,17 +27,16 @@ RUN apt-get update && apt-get install -my --force-yes \
   git \
   zip \
   unzip \
-  php7.0-pgsql \
-  php7.0-common \
-  php7.0-fpm \
-  php7.0-mcrypt \
-  php7.0-curl \
-  php7.0-gd \
-  php7.0-json \
-  php7.0-cli \
-  php7.0-xml \
-  php7.0-mbstring \
-  php7.0-zip \
+  php-pgsql \
+  php-common \
+  php-fpm \
+  php-curl \
+  php-gd \
+  php-json \
+  php-cli \
+  php-xml \
+  php-mbstring \
+  php-zip \
   php-xdebug \
   php-memcached
 
@@ -53,16 +54,16 @@ RUN echo 'root:docker' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # Ensure that PHP FPM is run as root.
-RUN sed -i "s/user = www-data/user = root/" /etc/php/7.0/fpm/pool.d/www.conf
-RUN sed -i "s/group = www-data/group = root/" /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i "s/user = www-data/user = root/" /etc/php/7.2/fpm/pool.d/www.conf
+RUN sed -i "s/group = www-data/group = root/" /etc/php/7.2/fpm/pool.d/www.conf
 
 # Pass all docker environment
-RUN sed -i '/^;clear_env = no/s/^;//' /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i '/^;clear_env = no/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
 
 # Get access to FPM-ping page /ping
-RUN sed -i '/^;ping\.path/s/^;//' /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i '/^;ping\.path/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
 # Get access to FPM_Status page /status
-RUN sed -i '/^;pm\.status_path/s/^;//' /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i '/^;pm\.status_path/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
 
 # Create folder for pid and socket files
 RUN mkdir /var/run/php
