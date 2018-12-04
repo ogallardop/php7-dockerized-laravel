@@ -6,9 +6,9 @@ PHP Dockerized gives you everything you need for developing PHP 7 applications l
 
 ## What's inside
 
-* [Nginx](http://nginx.org/)
+* [Apache](http://apache.org/)
 * [PostgreSQL](http://www.postgresql.org/)
-* [PHP-FPM](http://php-fpm.org/)
+* [PHP](http://php.net/)
 * [Memcached](http://memcached.org/)
 * [Redis](http://redis.io/)
 * [Elasticsearch](http://www.elasticsearch.org/)
@@ -38,10 +38,10 @@ That's it! You can now access your configured sites via the IP address of the Do
 
 ## SSH access
 
-To connect to nginx via ssh run:
+To connect to apache server via ssh run:
 
 ```sh
-$ docker-compose exec nginx /bin/bash
+$ docker-compose exec apache /bin/bash
 ```
 
 
