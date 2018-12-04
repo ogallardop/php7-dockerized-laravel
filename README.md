@@ -38,6 +38,10 @@ That's it! You can now access your configured sites via the IP address of the Do
 
 ## SSH access
 
+Run cd command to open your docker root folder
+
+```$ cd ...php7-dockerized-laravel/```
+
 To connect to apache server via ssh run:
 
 ```sh
