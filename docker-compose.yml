@@ -1,4 +1,4 @@
-nginx:
+apache:
   build: .
   ports:
     - "80:80"
@@ -7,13 +7,10 @@ nginx:
     - "9000:9000"
   links:
     - postgresql:postgresql
-    - memcached:memcached
-    - redis:redis
+ #   - redis:redis
     - elasticsearch:elasticsearch
   volumes:
-    - ./www:/var/www
-    - ./sites:/etc/nginx/conf.d
-    - ./logs:/var/log/supervisor
+    - ./www:/var/www/html
 
 postgresql:
   image: postgres
@@ -21,16 +18,12 @@ postgresql:
     - "5432:5432"
   volumes:
     - ./postgresql/:/var/lib/postgresql/data
-memcached:
-  image: memcached
-  ports:
-    - "11211:11211"
-
-redis:
-  image: redis
-  ports:
-    - "6379:6379"
-
+#
+#redis:
+#  image: redis
+#  ports:
+    #- "6379:6379"
+#
 elasticsearch:
   image: elasticsearch
   ports:

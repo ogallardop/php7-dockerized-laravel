@@ -1,90 +1,62 @@
-################################################################################
-# Base image
-################################################################################
-
 FROM ubuntu:18.04
-MAINTAINER  Oscar Gallardo "oscar.gallardo@outlook.com"
 
-################################################################################
-# Build instructions
-################################################################################
-
-# Remove default nginx configs.
-RUN rm -f /etc/nginx/conf.d/*
+MAINTAINER oscar.gallardo@outlook.com
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install packages
-RUN apt-get update && apt-get install -my software-properties-common && add-apt-repository ppa:ondrej/php
-RUN apt-get update && apt-get install -my --yes \
-  supervisor \
-  openssh-server \
-  nginx \
-  vim \
-  htop \
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+  apt-utils \
   curl \
-  wget \
+  # Install git
   git \
-  zip \
-  unzip \
-  php-pgsql \
-  php-common \
-  php-fpm \
-  php-curl \
-  php-gd \
-  php-json \
-  php-cli \
-  php-xml \
-  php-mbstring \
-  php-zip \
-  php-xdebug \
-  php-memcached
+  # Install apache
+  apache2 \
+  # Install php 7.2
+  libapache2-mod-php7.2 \
+  php7.2-cli \
+  php7.2-json \
+  php7.2-curl \
+  php7.2-fpm \
+  php7.2-gd \
+  php7.2-ldap \
+  php7.2-mbstring \
+  php7.2-mysql \
+  php7.2-soap \
+  php7.2-sqlite3 \
+  php7.2-xml \
+  php7.2-zip \
+  php7.2-intl \
+  php7.2-pgsql \
+  php-imagick \
+  # Install tools
+  openssl \
+  nano \
+  graphicsmagick \
+  imagemagick \
+  ghostscript \
+  mysql-client \
+  iputils-ping \
+  locales \
+  sqlite3 \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Add configuration files
-COPY conf/nginx.conf /etc/nginx/
-COPY conf/supervisord.conf /etc/supervisor/conf.d/
+# Set locales
+RUN locale-gen en_US.UTF-8 en_GB.UTF-8 de_DE.UTF-8 es_ES.UTF-8 fr_FR.UTF-8 it_IT.UTF-8 km_KH sv_SE.UTF-8 fi_FI.UTF-8
 
-# Configure openssh
-RUN mkdir /var/run/sshd
-RUN echo 'root:docker' | chpasswd
-RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN a2enmod rewrite expires
 
-# Ensure that PHP FPM is run as root.
-RUN sed -i "s/user = www-data/user = root/" /etc/php/7.2/fpm/pool.d/www.conf
-RUN sed -i "s/group = www-data/group = root/" /etc/php/7.2/fpm/pool.d/www.conf
-
-# Pass all docker environment
-RUN sed -i '/^;clear_env = no/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
-
-# Get access to FPM-ping page /ping
-RUN sed -i '/^;ping\.path/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
-# Get access to FPM_Status page /status
-RUN sed -i '/^;pm\.status_path/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
-
-# Create folder for pid and socket files
-RUN mkdir /var/run/php
-
-# Add configuration files
-COPY conf/php.ini /etc/php5/fpm/conf.d/40-custom.ini
-
-################################################################################
-# Volumes
-################################################################################
-
-VOLUME ["/var/www", "/etc/nginx/conf.d"]
-
-################################################################################
-# Ports
-################################################################################
+# Configure vhost
+ADD sites/default.conf /etc/apache2/sites-enabled/000-default.conf
 
 EXPOSE 80 443 22 9000
 
-################################################################################
-# Entrypoint
-################################################################################
+WORKDIR /var/www/html
+VOLUME ["/var/www"]
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+RUN rm index.html
+
+CMD ["apache2ctl", "-D", "FOREGROUND"]
+
