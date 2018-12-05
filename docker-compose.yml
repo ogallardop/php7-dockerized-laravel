@@ -11,6 +11,7 @@ apache:
     - elasticsearch:elasticsearch
   volumes:
     - ./www:/var/www/html
+    - ./logs:/var/log/apache2
 
 postgresql:
   image: postgres
