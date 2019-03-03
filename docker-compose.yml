@@ -7,6 +7,7 @@ apache:
     - "9000:9000"
   links:
     - postgresql:postgresql
+    - mysqldb:mysqldb
  #   - redis:redis
     - elasticsearch:elasticsearch
   volumes:
@@ -30,3 +31,13 @@ elasticsearch:
   ports:
     - "9200:9200"
     - "9300:9300"
+mysqldb:
+    image: mysql:5.7.25
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - my-db:/var/lib/mysql
