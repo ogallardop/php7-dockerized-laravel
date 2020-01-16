@@ -1,3 +1,4 @@
 postgresql/
 logs/
 www/*
+.idea/
