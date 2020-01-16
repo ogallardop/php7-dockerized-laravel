@@ -3,34 +3,33 @@ apache:
   ports:
     - "80:80"
     - "443:443"
-    - "2222:22"
-    - "9000:9000"
+#    - "2222:22"
+#    - "9000:9000"
   links:
-    - postgresql:postgresql
+#    - postgresql:postgresql
     - mysqldb:mysqldb
- #   - redis:redis
-    - elasticsearch:elasticsearch
+#    - redis:redis
+#    - elasticsearch:elasticsearch
   volumes:
     - ./www:/var/www/html
     - ./logs:/var/log/apache2
 
-postgresql:
-  image: postgres
-  ports:
-    - "5432:5432"
-  volumes:
-    - ./postgresql/:/var/lib/postgresql/data
-#
+#postgresql:
+#  image: postgres
+#  ports:
+#    - "5432:5432"
+#  volumes:
+#    - ./postgresql/:/var/lib/postgresql/data
 #redis:
 #  image: redis
 #  ports:
     #- "6379:6379"
-#
-elasticsearch:
-  image: elasticsearch
-  ports:
-    - "9200:9200"
-    - "9300:9300"
+#elasticsearch:
+#  image: elasticsearch
+#  ports:
+#    - "9200:9200"
+#    - "9300:9300"
+
 mysqldb:
     image: mysql:5.7.25
     command: --default-authentication-plugin=mysql_native_password
@@ -41,3 +40,4 @@ mysqldb:
       MYSQL_ROOT_PASSWORD: rootpass
     volumes:
       - my-db:/var/lib/mysql
+      - ./build/mysql:/docker-entrypoint-initdb.d
