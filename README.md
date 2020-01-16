@@ -19,20 +19,16 @@ PHP Dockerized gives you everything you need for developing PHP 7 applications l
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Docker Machine](https://docs.docker.com/machine/) (Mac and Windows only)
 
-## Configuration
+### Getting started
+1. Run `make init` in the project directory:
 
+    ```bash
+    make init
+    ```
 
-```sh
-$ docker-compose build
-```
+    It will build the container.
 
-## Running
-
-Set up a Docker Machine and then run:
-
-```sh
-$ docker-compose up
-```
+2. `make up` to run the project and attach tty or `make run` to run in background. It will be accessible on `http://localhost`
 
 That's it! You can now access your configured sites via the IP address of the Docker Machine or locally if you're running a Linux flavour and using Docker natively.
 
@@ -40,12 +36,14 @@ That's it! You can now access your configured sites via the IP address of the Do
 
 Run cd command to open your docker root folder
 
-```$ cd ...php7-dockerized-laravel/```
+```shell script
+cd php7-dockerized-laravel/
+```
 
 To connect to apache server via ssh run:
 
-```sh
-$ docker-compose exec apache /bin/bash
+```shell script
+make cli
 ```
 
 
