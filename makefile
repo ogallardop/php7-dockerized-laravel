@@ -14,5 +14,8 @@ up: ## Start all services
 	@docker-compose up
 	echo "Server is running at http://127.0.0.1"
 
+down:
+	@docker-compose down
+
 cli:
 	@docker-compose exec apache /bin/bash

@@ -26,11 +26,14 @@ PHP Dockerized gives you everything you need for developing PHP 7 applications l
     make init
     ```
 
-    It will build the container.
+    It will build the container and get your services up when you init the project.
 
 2. `make up` to run the project and attach tty or `make run` to run in background. It will be accessible on `http://localhost`
 
 That's it! You can now access your configured sites via the IP address of the Docker Machine or locally if you're running a Linux flavour and using Docker natively.
+
+## Other options
+1. `make down` to get down the container services.
 
 ## SSH access
 
