@@ -8,9 +8,11 @@ help: ## This help.
 
 init: ## Build the container 
 	@docker-compose build
+	make up
 
 up: ## Start all services
 	@docker-compose up
+	echo "Server is running at http://127.0.0.1"
 
 cli:
 	@docker-compose exec apache /bin/bash
